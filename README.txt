@@ -67,7 +67,7 @@ EXAMPLES
        If you have an ssh key located at ~/.ssh/work/id_rsa, it can be  loaded
        by entering:
 
-       $ OPSSH work
+       $ opssh work
 
 DEPENDENCIES
        op     The 1Password CLI client
