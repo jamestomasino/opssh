@@ -63,13 +63,6 @@ searched in order and the search stops at the first successful match.
 Unless otherwise defined, this variable defaults to ~/.ssh/
 
 This is the same as setting `key_locations' in the configuration file.
-.TP
-.B BW_PASSWORD
-1Password master password (optional). If set, this environment variable will be
-used to automatically authenticate your 1Password session. Alternatively,
-a file at $XDG_CONFIG_HOME/1Password CLI/bw.pass containing the password will
-provide the same functionality. If neither exist the user will be prompted for
-the password.
 
 .SH EXAMPLES
 If you have an ssh key located at ~/.ssh/work/id_rsa, it can be loaded by
@@ -79,7 +72,7 @@ $ OPSSH work
 
 .SH DEPENDENCIES
 .TP
-.B bw
+.B op
 The 1Password CLI client
 .TP
 .B expect

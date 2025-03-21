@@ -63,22 +63,14 @@ ENVIRONMENT VARIABLES
               This is the same as setting `key_locations' in the configuration
               file.
 
-       BW_PASSWORD
-              1Password master password (optional). If set,  this  environment
-              variable  will be used to automatically authenticate your 1Pass‐
-              word session. Alternatively, a file  at  $XDG_CONFIG_HOME/1Pass‐
-              word  CLI/bw.pass  containing the password will provide the same
-              functionality. If neither exist the user will  be  prompted  for
-              the password.
-
 EXAMPLES
-       If  you have an ssh key located at ~/.ssh/work/id_rsa, it can be loaded
+       If you have an ssh key located at ~/.ssh/work/id_rsa, it can be  loaded
        by entering:
 
        $ OPSSH work
 
 DEPENDENCIES
-       bw     The 1Password CLI client
+       op     The 1Password CLI client
 
        expect programmed dialogue with interactive programs
 
