@@ -6,9 +6,9 @@ pattern_prefix="SSH:"
 key_locations="${HOME}/.ssh/"
 key_types="id_ed25519 id_dsa id_rsa"
 
-# Required: bw (bitwarden cli)
-if ! command -v bw > /dev/null; then
-  printf "Bitwarden CLI is required.\n"
+# Required: op (1password cli)
+if ! command -v op > /dev/null; then
+  printf "1Password CLI is required.\n"
   exit 2
 fi
 
@@ -20,12 +20,12 @@ fi
 
 show_help () {
   cat > /dev/stdout << END
-bssh [options] [ssh-key]
+opssh [options] [ssh-key]
 
 OPTIONAL FLAGS:
   -h                          Show this help
   -v                          Show current version info
-  -p [pattern prefix]         Set Bitwarden prefix pattern (default "SSH:")
+  -p [pattern prefix]         Set 1Password prefix pattern (default "SSH:")
   -t [type]                   Set key type
 
 END
@@ -78,9 +78,9 @@ parse_input () {
 main () {
   # Load config, overwrites hardcoded defaults
   if [ -n "$XDG_CONFIG_HOME" ]; then
-    config="${XDG_CONFIG_HOME}/bssh/config"
+    config="${XDG_CONFIG_HOME}/opssh/config"
   else
-    config="${HOME}/.config/bssh/config"
+    config="${HOME}/.config/opssh/config"
   fi
   if [ -f "$config" ]; then
     # shellcheck disable=SC1090
@@ -125,28 +125,12 @@ main () {
     exit 1
   fi
 
-  # Unlock bitwarden and get new session key
-  if [ -n "${BW_PASSWORD}" ]; then
-    session=$(bw unlock --raw --passwordenv BW_PASSWORD)
-  elif [ -f "${bwconfig}/bw.pass" ]; then
-    if [ -n "${BITWARDENCLI_APPDATA_DIR}" ]; then
-      bwconfig="${BITWARDENCLI_APPDATA_DIR}"
-    elif [ -n "$XDG_CONFIG_HOME" ]; then
-      bwconfig="${XDG_CONFIG_HOME}/Bitwarden CLI"
-    else
-      bwconfig="${HOME}/.config/Bitwarden CLI"
-    fi
-    session=$(bw unlock --raw --passwordfile "${bwconfig}/bw.pass")
-  else
-    session=$(bw unlock --raw)
-  fi
-
-  # Retrieve key from Bitwarden. If logged in but not recently authenticated
-  password=$(bw --session "$session" get password "${pattern_prefix} ${key}" 2> /dev/null)
+  # Retrieve key from 1Password. If logged in but not recently authenticated
+  password=$(op item get --fields label=password --reveal "${pattern_prefix} ${key}" 2> /dev/null)
 
   # If the "SSH: xxx" pattern failed, try the key directly
   if [ -z "$password" ]; then
-    password=$(bw --session "$session" get password "${key}" 2> /dev/null)
+    password=$(op item get --fields label=password --reveal "${key}" 2> /dev/null)
   fi
 
   # If we found a password, apply it to the key
